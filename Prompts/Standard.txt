@@ -1,0 +1,2 @@
+Standard prompt: (included after code)
+Generate program invariants 
