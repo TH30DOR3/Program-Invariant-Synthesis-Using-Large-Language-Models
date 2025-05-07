@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h> // Include for using assertions
 
 void display(int *arr, int n)
 {
@@ -22,22 +23,40 @@ void cycleSort(int *arr, int n)
 {
     int writes = 0;
 
+    // Invariant: Array size must be non-negative
+    assert(n >= 0);
+
     for (int cycle_start = 0; cycle_start <= n - 2; cycle_start++)
     {
         int item = arr[cycle_start];
         int pos = cycle_start;
 
-        for (int i = cycle_start + 1; i < n; i++)
+        // Invariant: item must equal arr[cycle_start]
+        assert(item == arr[cycle_start]);
+
+        for (int i = cycle_start + 1; i < n; i++) {
+            // Invariant: i is always in bounds
+            assert(i >= 0 && i < n);
             if (arr[i] < item)
                 pos++;
+        }
+
+        // Invariant: pos must be within array bounds
+        assert(pos >= 0 && pos < n);
 
         if (pos == cycle_start)
             continue;
 
-        while (item == arr[pos]) pos += 1;
+        while (item == arr[pos]) {
+            pos += 1;
+            // Invariant: pos must not go out of bounds
+            assert(pos < n);
+        }
 
         if (pos != cycle_start)
         {
+            // Invariant: pos must be a valid index
+            assert(pos >= 0 && pos < n);
             swap(&item, &arr[pos]);
             writes++;
         }
@@ -46,14 +65,20 @@ void cycleSort(int *arr, int n)
         {
             pos = cycle_start;
 
-            for (int i = cycle_start + 1; i < n; i++)
+            for (int i = cycle_start + 1; i < n; i++) {
+                assert(i >= 0 && i < n);
                 if (arr[i] < item)
                     pos += 1;
+            }
 
-            while (item == arr[pos]) pos += 1;
+            while (item == arr[pos]) {
+                pos += 1;
+                assert(pos < n);
+            }
 
             if (item != arr[pos])
             {
+                assert(pos >= 0 && pos < n);
                 swap(&item, &arr[pos]);
                 writes++;
             }
