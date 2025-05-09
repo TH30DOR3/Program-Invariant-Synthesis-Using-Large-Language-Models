@@ -1,14 +1,22 @@
 Baseline://////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-useful: 2
-trivial: 2
-sometimes useful: 1
+useful: 8
+trivial: 1
+sometimes useful: 10
 
-Return Useful invariants here
+assert(vertices > 0);                        // createGraph – graph must have at least one vertex
 
-assert(isSorted(arr, 0, i - 1)); // at the start of each outer-loop pass, guarantees the induction hypothesis that arr[0..i-1] is sorted
+assert(src  >= 0 && src  < graph->vertices); // addEdge – source index within bounds
+assert(dest >= 0 && dest < graph->vertices); // addEdge – destination index within bounds
 
-assert(isSorted(arr, 0, i)); // after inserting key, confirms that the prefix arr[0..i] is now sorted, preserving correctness
+assert(vertex >= 0 && vertex < graph->vertices);          // DFS – current vertex within bounds
+assert(adjacentVertex >= 0 && adjacentVertex < graph->vertices); // DFS – adjacent vertex within bounds
+
+assert(orderSize >= 0 && orderSize <= graph->vertices);   // DFSTraversal – traversal list size valid
+assert(order[i]  >= 0 && order[i]  < graph->vertices);    // DFSTraversal – each listed vertex valid
+
+assert(orderSize == vertices);               // main – traversal order covers all vertices
+
 
 COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
