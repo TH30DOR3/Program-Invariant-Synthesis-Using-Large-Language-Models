@@ -20,19 +20,23 @@ assert(orderSize == vertices);               // main – traversal order covers 
 
 COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-useful: 4
-trivial: 2
-sometimes useful: 1
+useful: 8
+trivial: 5
+sometimes useful: 14
 
-Return Useful invariants here
+assert(vertices > 0);                        /* createGraph – graph must have ≥ 1 vertex            */
 
-for (int x = 0; x < i - 1; ++x) assert(arr[x] <= arr[x + 1]); // before each outer-loop pass, arr[0..i-1] is already sorted
+assert(src  >= 0 && src  < graph->vertices); /* addEdge – source index within bounds                */
+assert(dest >= 0 && dest < graph->vertices); /* addEdge – destination index within bounds           */
 
-for (int x = 0; x < i; ++x) assert(arr[x] <= arr[x + 1]); // after inserting key, arr[0..i] is sorted
+assert(vertex >= 0 && vertex < graph->vertices);          /* DFS – vertex index within bounds      */
+assert(!visited[vertex]);                                   /* DFS – pre-condition: vertex unvisited */
 
-for (int x = 0; x < n - 1; ++x) assert(arr[x] <= arr[x + 1]); // inside insertionSort, verifies the whole array is sorted on exit
+assert(adjacentVertex >= 0 && adjacentVertex < graph->vertices); /* DFS – adjacent within bounds  */
 
-for (int i = 0; i < n - 1; ++i) assert(arr[i] <= arr[i + 1]); // in main, post-condition that the returned array is fully sorted
+assert(order[i] >= 0 && order[i] < graph->vertices);      /* DFSTraversal – every vertex index valid */
+
+assert(orderSize == vertices);               /* main – traversal order covers all vertices          */
 
 
 Role://///////////////////////////////////////////////////////////////
