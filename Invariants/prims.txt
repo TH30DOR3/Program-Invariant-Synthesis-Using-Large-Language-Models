@@ -7,6 +7,28 @@ Return Useful invariants here
 
 assert(inMST == count + 1); // after each outer-loop iteration, it guarantees that the set mstSet contains exactly count + 1 vertices, capturing Prim’s essential progress invariant that the MST grows by one vertex per pass and will contain all V vertices when the loop terminates.
 
+Few shot: //////////////////////////////////////////////////////////////////////////////////////
+
+
+useful: 6
+trivial: 7
+sometimes useful: 2
+
+Return Useful invariants here
+
+assert(min_index >= 0 && min_index < V); – guarantees the vertex chosen by minKey is a legal array index, a core correctness requirement.
+
+assert(mstSet[min_index] == false); – ensures the vertex returned by minKey has not yet been placed in the MST, preserving Prim’s algorithm semantics.
+
+assert(parent[i] >= 0 && parent[i] < V); – (inside printMST) checks that every edge printed refers to a legitimate parent vertex, protecting tree structure integrity.
+
+assert(includedCount == count); – outer-loop invariant confirming that exactly count vertices are already in the MST before the next selection step, a key progress measure.
+
+assert(parent[i] >= 0 && parent[i] < V); – (postcondition in primMST) validates that all non-root vertices were assigned a valid parent, ensuring a fully connected spanning tree.
+
+assert(mstSet[i] == true); – final invariant verifying that every vertex has been marked as included in the MST, certifying that construction is complete.
+
+
 COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 useful: 5
