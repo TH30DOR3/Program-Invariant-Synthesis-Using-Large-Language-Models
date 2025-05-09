@@ -1,0 +1,69 @@
+You're job is to take the code given to you, look for the invariants in the form of assertions, and then check the quality of each (MAKE SURE YOU GET ALL THE ASSERTIONS IN THE CODE) assertion based on the following mutually exclusive criteria:
+
+-"trivial" invariants and count 
+- "useful" invariants and count
+- "sometimes useful" invariants and their count 
+
+
+Invariant Classification Framework
+✅ 1. Useful Invariants
+Definition: An invariant is useful if violating it would signal a semantic or logical error in the program's behavior, i.e., the program would be partially or wholly incorrect with respect to its specification.
+
+Rules for Classification:
+
+It constrains functional correctness, such as optimality, consistency, or convergence.
+
+It enforces key algorithmic properties (e.g., triangle inequality, sortedness, balance conditions).
+
+It is not implied by syntax, variable declarations, or constant assignments.
+
+Violating it would affect output, control flow, or data structure integrity.
+
+It often relates to postconditions or loop-fixed points.
+
+
+❌ 2. Trivial Invariants
+Definition: An invariant is trivial if it checks a property that is guaranteed by immediate syntax, language semantics, or initialization logic. These invariants offer no additional verification power and are redundant unless detecting memory corruption.
+
+Rules for Classification:
+
+It checks a value immediately after declaration or assignment to a constant.
+
+It asserts a condition that is structurally guaranteed (e.g., loop bounds, index ranges).
+
+It confirms properties already enforced by static typing or domain constraints.
+
+It would always hold unless the code is malformed or violates basic invariants (e.g., segmentation faults).
+
+
+
+🟡 3. Sometimes Useful Invariants
+Definition: An invariant is sometimes useful if it does not directly enforce correctness, but can:
+
+serve as a diagnostic or sanity check,
+
+help during debugging or partial implementation, or
+
+act as a guard against uncommon side effects or unexpected inputs.
+
+
+Rules for Classification:
+
+It asserts a redundant or derived property, but not guaranteed by syntax.
+
+It may help uncover implementation mistakes (e.g., forgotten guards or missed updates).
+
+It’s not strictly necessary for correctness, but aids program stability or maintainability.
+
+Its utility depends on context (e.g., development vs. production).
+
+
+
+
+Output in this format :
+
+useful: *count*
+trivial: *count*
+sometimes useful: *count*
+
+***Return Useful invariants here***
