@@ -28,7 +28,13 @@ particularly those that would be useful as input for an SMT solver like Z3. Focu
 invariants that capture the core properties of the loop. Generate the invariants in the form of C assertions and give me back the full original code.
 
 /////////////////////////////////////////////////////////////////////
-Few Shot:
+
+Your goal is to identify all non-trivial invariants that capture the essential relationships between variables and their bounds.  Generate the invariants in the form of C assertions and give me back the full original code.
+
+**High-Quality Examples of Invariants in the format of C assertions:**
+
+
+
 example 1:
 #include <stdio.h>
 #include <stdlib.h>
