@@ -1,0 +1,38 @@
+Baseline: //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+useful: 1
+trivial: 4
+sometimes useful: 3
+
+Return Useful invariants here
+
+assert(inMST == count + 1); // after each outer-loop iteration, it guarantees that the set mstSet contains exactly count + 1 vertices, capturing Prim’s essential progress invariant that the MST grows by one vertex per pass and will contain all V vertices when the loop terminates.
+
+COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+useful: 5
+trivial: 12
+sometimes useful: 0
+
+Return Useful invariants here
+
+assert(parent[i] >= 0 && parent[i] < V); // when printing the MST, every stored parent index must be a valid vertex or the tree is structurally invalid
+
+assert(u >= 0 && u < V); // the vertex returned by minKey must be a real, as-yet-unselected vertex before it is added to the MST
+
+assert(mstSet[i] == true || key[i] == INT_MAX); // after the main loop, each vertex is either in the MST or remains unreachable, catching logic errors that leave vertices half-processed
+
+assert(graph[i][j] == graph[j][i]); // input validation that the adjacency matrix is symmetric, a pre-condition for Prim’s correctness on undirected graphs
+
+assert(graph[i][j] >= 0); // enforces the non-negative weight assumption required for Prim’s optimal-substructure property
+
+Role:////////////////////////////////////////
+
+useful: 2
+trivial: 14
+sometimes useful: 4
+
+Return Useful invariants here
+
+assert(mstSet[min_index] == false); // guarantees the vertex chosen by minKey has not yet been included in the MST, preserving the algorithm’s fundamental “grow-by-one” property
+
+assert(included == count + 1); // after each outer iteration, confirms that exactly count + 1 vertices are marked in mstSet, ensuring the tree expands by one vertex per pass and will contain all V vertices when the loop terminates
