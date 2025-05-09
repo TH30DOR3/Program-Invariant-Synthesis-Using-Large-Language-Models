@@ -19,10 +19,302 @@ Output the original code, and annotate it with your generated assertions in appr
 Here's the C code:
 
 
-
+/////////////////////////////////////////////////////////////////
 Role Prompting: 
 
 You are a Distinguished Professor of Formal Methods, specializing in the automated synthesis of precise program invariants for safety-critical systems. 
 Your goal is to identify the strongest and most complete set of loop invariants necessary for full program verification, 
 particularly those that would be useful as input for an SMT solver like Z3. Focus on mathematical rigor and 
 invariants that capture the core properties of the loop. Generate the invariants in the form of C assertions and give me back the full original code.
+
+/////////////////////////////////////////////////////////////////////
+Few Shot:
+example 1:
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+
+// Displays the array
+void display(int *arr, int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+// Swaps two integers
+void swap(int *first, int *second)
+{
+    int temp = *first;
+    *first = *second;
+    *second = temp;
+}
+
+// Cycle sort with invariants for formal verification
+void cycleSort(int *arr, int n)
+{
+    int writes = 0;
+
+    for (int cycle_start = 0; cycle_start <= n - 2; cycle_start++)
+    {
+        // Invariant: arr[0..cycle_start-1] is sorted and contains the smallest elements
+        for (int i = 0; i < cycle_start - 1; i++)
+            assert(arr[i] <= arr[i + 1]);
+
+        int item = arr[cycle_start];
+        int pos = cycle_start;
+
+        // Count elements less than item to find correct position
+        for (int i = cycle_start + 1; i < n; i++) {
+            if (arr[i] < item)
+                pos++;
+        }
+
+        // Invariant: pos equals number of elements < item in arr[cycle_start+1..n-1]
+        int count = 0;
+        for (int i = cycle_start + 1; i < n; i++) {
+            if (arr[i] < item) count++;
+        }
+        assert(pos == cycle_start + count);
+
+        if (pos == cycle_start)
+            continue;
+
+        while (item == arr[pos]) pos += 1;
+
+        if (pos != cycle_start)
+        {
+            swap(&item, &arr[pos]);
+            writes++;
+        }
+
+        while (pos != cycle_start)
+        {
+            pos = cycle_start;
+
+            for (int i = cycle_start + 1; i < n; i++)
+                if (arr[i] < item)
+                    pos += 1;
+
+            while (item == arr[pos]) pos += 1;
+
+            if (item != arr[pos])
+            {
+                swap(&item, &arr[pos]);
+                writes++;
+            }
+
+            // Invariant: no element is lost or duplicated; item is being placed into correct final position
+            // Item will eventually reach its correct location
+        }
+
+        // Post-loop invariant: arr[0..cycle_start] is now sorted
+        for (int i = 0; i < cycle_start; i++)
+            assert(arr[i] <= arr[i + 1]);
+    }
+
+    // Final invariant: array is sorted
+    for (int i = 0; i < n - 1; i++)
+        assert(arr[i] <= arr[i + 1]);
+}
+
+int main()
+{
+    int arr[] = {20, 40, 50, 10, 30}; // Sample input array
+    int n = sizeof(arr) / sizeof(arr[0]); // Compute size of array
+
+    printf("Original array: ");
+    display(arr, n);
+
+    cycleSort(arr, n);
+
+    printf("Sorted array: ");
+    display(arr, n);
+
+    return 0;
+}
+
+example 2:
+#include <stdio.h>
+#include <assert.h>
+
+#define V 5
+#define INF 100000000
+
+void floydWarshall(int dist[V][V]) {
+    for (int k = 0; k < V; k++) {
+
+        // Loop invariant: For all i,j: dist[i][j] == minimum weight of path from i to j using only nodes in {0,...,k-1}
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+
+                // Invariant: dist[i][j] <= dist[i][k] + dist[k][j] (Triangle inequality)
+                assert(dist[i][j] <= (dist[i][k] == INF || dist[k][j] == INF ? INF : dist[i][k] + dist[k][j]));
+
+                if (dist[i][k] != INF && dist[k][j] != INF &&
+                    dist[i][k] + dist[k][j] < dist[i][j]) {
+
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+
+                // Post-update invariant: dist[i][j] is the minimum of previous dist[i][j] and new possible path
+                assert(dist[i][j] <= (dist[i][k] == INF || dist[k][j] == INF ? INF : dist[i][k] + dist[k][j]));
+            }
+        }
+    }
+
+    // Final invariant after all k: dist[i][j] is shortest distance from i to j over any path
+    for (int i = 0; i < V; i++) {
+        assert(dist[i][i] == 0); // No negative cycles (required for Floyd-Warshall to be valid)
+    }
+}
+
+int main() {
+    int dist[V][V] = {
+        {0, 4, INF, 5, INF},
+        {INF, 0, 1, INF, 6},
+        {2, INF, 0, 3, INF},
+        {INF, INF, 1, 0, 2},
+        {1, INF, INF, 4, 0}
+    };
+
+    floydWarshall(dist);
+
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (dist[i][j] == INF)
+                printf("INF ");
+            else
+                printf("%d ", dist[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
+
+example 3:
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <assert.h>
+
+struct Node {
+	int data;
+	struct Node* next;
+};
+
+struct List {
+	struct Node* head;
+};
+
+struct Graph {
+	int vertices;
+	struct List* array;
+};
+
+struct Node* createNode(int data) {
+	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+	newNode->data = data;
+	newNode->next = NULL;
+	return newNode;
+}
+
+struct Graph* createGraph(int vertices) {
+	struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+	graph->vertices = vertices;
+	graph->array = (struct List*)malloc(vertices * sizeof(struct List));
+
+	for (int i = 0; i < vertices; i++) {
+		// Loop invariant: 0 <= i <= vertices
+		assert(0 <= i && i <= vertices);
+		// All previous heads have been initialized
+		for (int j = 0; j < i; j++) {
+			assert(graph->array[j].head == NULL);
+		}
+
+		graph->array[i].head = NULL;
+	}
+
+	return graph;
+}
+
+void addEdge(struct Graph* graph, int src, int dest) {
+	struct Node* newNode = createNode(dest);
+	newNode->next = graph->array[src].head;
+	graph->array[src].head = newNode;
+}
+
+void DFS(struct Graph* graph, int vertex, bool visited[]) {
+	visited[vertex] = true;
+	printf("%d ", vertex);
+
+	struct Node* currentNode = graph->array[vertex].head;
+	while (currentNode) {
+		// Loop invariant: currentNode points to a node in graph->array[vertex]'s list
+		assert(currentNode != NULL);
+
+		int adjacentVertex = currentNode->data;
+
+		// Invariant: 0 <= adjacentVertex < graph->vertices
+		assert(adjacentVertex >= 0 && adjacentVertex < graph->vertices);
+
+		if (!visited[adjacentVertex]) {
+			DFS(graph, adjacentVertex, visited);
+		}
+
+		currentNode = currentNode->next;
+	}
+}
+
+void DFSTraversal(struct Graph* graph, int* order, int orderSize) {
+	bool* visited = (bool*)malloc(graph->vertices * sizeof(bool));
+
+	for (int i = 0; i < graph->vertices; i++) {
+		// Loop invariant: 0 <= i <= graph->vertices
+		assert(i >= 0 && i <= graph->vertices);
+
+		// All visited[j] for j < i have been set to false
+		for (int j = 0; j < i; j++) {
+			assert(visited[j] == false);
+		}
+
+		visited[i] = false;
+	}
+
+	for (int i = 0; i < orderSize; i++) {
+		// Loop invariant: 0 <= i <= orderSize
+		assert(i >= 0 && i <= orderSize);
+		// Loop invariant: order[i] ∈ [0, graph->vertices)
+		assert(order[i] >= 0 && order[i] < graph->vertices);
+
+		if (!visited[order[i]]) {
+			DFS(graph, order[i], visited);
+		}
+	}
+
+	free(visited);
+}
+
+int main() {
+	int vertices = 4;
+	struct Graph* graph = createGraph(vertices);
+
+	addEdge(graph, 2, 0);
+	addEdge(graph, 0, 2);
+	addEdge(graph, 1, 2);
+	addEdge(graph, 0, 1);
+	addEdge(graph, 3, 3);
+	addEdge(graph, 1, 3);
+
+	int order[] = {2, 0, 1, 3};
+	int orderSize = sizeof(order) / sizeof(order[0]);
+
+	printf("Following is Depth First Traversal (starting from vertex 2):\n");
+	DFSTraversal(graph, order, orderSize);
+
+	return 0;
+}
