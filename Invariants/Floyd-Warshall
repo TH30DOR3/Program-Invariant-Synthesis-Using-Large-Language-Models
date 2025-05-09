@@ -9,6 +9,27 @@ if (i == j) { assert(dist[i][j] == 0); } // after the algorithm finishes, each
 
 assert(dist[i][j] <= dist[i][k] + dist[k][j]); // final global triangle-inequality check guaranteeing every recorded distance is the true all-pairs shortest-path value
 
+Few shot: //////////////////////////////////////////////////////////////////////////////////////
+
+
+useful: 5
+trivial: 3
+sometimes useful: 1
+
+Return Useful invariants here
+
+assert(dist[i][i] == 0); – ensures the distance from any vertex to itself never deviates from zero (core correctness condition).
+
+if (dist[i][k] != INF && dist[k][j] != INF) { assert(dist[i][j] <= dist[i][k] + dist[k][j]); } – pre-update triangle-inequality check that guards the shortest-path property.
+
+if (dist[i][k] != INF && dist[k][j] != INF) { assert(dist[i][j] <= dist[i][k] + dist[k][j]); } – post-update triangle-inequality check confirming the relaxation did not violate correctness.
+
+if (dist[i][k] != INF && dist[k][j] != INF) { assert(dist[i][j] <= dist[i][k] + dist[k][j]); } – final global triangle-inequality check after the algorithm finishes, certifying all-pairs shortest paths.
+
+if (i == j) { assert(dist[i][j] == 0); } – final self-distance check, validating that no negative self-loops appeared during computation.
+
+
+
 COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 useful: 1
