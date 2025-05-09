@@ -3,11 +3,38 @@ useful: 2
 trivial: 0
 sometimes useful: 3
 
+Return Useful invariants here
+
+if (i == j) { assert(dist[i][j] == 0); } // after the algorithm finishes, each vertex’s distance to itself must be exactly 0
+
+assert(dist[i][j] <= dist[i][k] + dist[k][j]); // final global triangle-inequality check guaranteeing every recorded distance is the true all-pairs shortest-path value
+
 COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+useful: 1
+trivial: 6
+sometimes useful: 5
+
+Return Useful invariants here
+
+if (i == j) assert(dist[i][j] == 0); // post-condition that verifies every vertex’s distance to itself is 0, 
+confirming the algorithm produced valid shortest-path distances and that no negative cycle was introduced
+
+Role:////////////////////////////////////
 
 
-Role:
+useful: 3
+trivial: 1
+sometimes useful: 0
+
+Return Useful invariants here
+
+assert(dist[i][j] <= (dist[i][k] == INF || dist[k][j] == INF ? INF : dist[i][k] + dist[k][j])); // before relaxation: guarantees the current table already satisfies the triangle inequality using only intermediates < k, capturing the core Floyd-Warshall induction step
+
+assert(dist[i][j] <= (dist[i][k] == INF || dist[k][j] == INF ? INF : dist[i][k] + dist[k][j])); // after relaxation: re-asserts the triangle inequality, ensuring the update preserved the shortest-path property for the new set of intermediates ≤ k
+
+assert(dist[i][i] == 0); // in the final check: confirms every vertex’s distance to itself is zero, ruling out negative cycles and validating the computed all-pairs shortest-path distances
+
 
 
 
