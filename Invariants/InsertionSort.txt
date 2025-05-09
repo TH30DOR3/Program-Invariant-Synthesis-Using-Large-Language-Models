@@ -12,6 +12,25 @@ assert(isSorted(arr, 0, i - 1)); // at each outer-loop entry, guarantees the p
 assert(isSorted(arr, 0, i)); // after inserting key, confirms arr[0..i] is now sorted, preserving correctness
 
 
+Few shot: //////////////////////////////////////////////////////////////////////////////////////
+
+useful: 4
+trivial: 2
+sometimes useful: 1
+
+Return Useful invariants here
+
+assert(isSorted(arr, 0, i - 1)); – outer-loop invariant guaranteeing that the prefix processed so far is already sorted, a key condition for insertion-sort correctness.
+
+if (j >= 0) { assert(arr[j] <= key); } – after the inner loop finishes, confirms that the element immediately preceding the insertion point is not greater than the key, ensuring the key’s final position maintains order.
+
+assert(isSorted(arr, 0, i)); – post-iteration check that the sorted region has grown by one element, preserving the loop invariant and algorithm progress.
+
+assert(isSorted(arr, 0, n - 1)); – final check that the entire array is sorted on completion, certifying overall correctness.
+
+
+
+
 COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 useful: 4
