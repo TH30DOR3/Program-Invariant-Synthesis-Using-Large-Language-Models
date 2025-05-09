@@ -1,1 +1,64 @@
+Baseline: //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+total invariants: 5
+1: not trivial but not useful. 
+2: useful
+3 & 4: repeat of 1 and 4, redundant 
+5: 
+
+
+
+*** Assertion 1: line 12 ***
+for (int j = 0; j < V; j++) {
+                // Invariant: Distance from a node to itself is always 0
+                assert(dist[i][i] == 0);
+
+
+*** Assertion 2: line 16
+// Invariant: Triangle inequality should hold if intermediate path is valid
+                if (dist[i][k] != INF && dist[k][j] != INF) {
+                    assert(dist[i][j] <= dist[i][k] + dist[k][j]);
+                }
+
+*** Assertion 3,4,5 : lines 33, 39, 44***
+// Final invariants after Floyd-Warshall completes
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            // Invariant: Distance from a node to itself must be 0
+            if (i == j) {
+                assert(dist[i][j] == 0);
+            }
+
+            // Invariant: Triangle inequality must now hold for all k
+            for (int k = 0; k < V; k++) {
+                if (dist[i][k] != INF && dist[k][j] != INF) {
+                    assert(dist[i][j] <= dist[i][k] + dist[k][j]);
+                }
+            }
+
+            // Invariant: All distances must be non-negative or INF
+            assert(dist[i][j] >= 0 || dist[i][j] == INF);
+        }
+    }
+}
+
+COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+Role:
+
+*** Assertion 1: line ***
+for (int j = 0; j < V; j++) {
+
+            // Invariants BEFORE update
+            assert(dist[i][i] == 0);  // No negative self-loop
+            assert(dist[i][j] <= dist[i][k] + dist[k][j] || 
+                   dist[i][k] == INF || dist[k][j] == INF); // Triangle inequality preserved
+
+
+
+
+
+
+
 
