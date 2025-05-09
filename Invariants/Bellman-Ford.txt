@@ -8,7 +8,15 @@ Few shot: //////////////////////////////////////////////////////////////////////
 
 
 
+useful: 2
+trivial: 4
+sometimes useful: 3
 
+Return Useful invariants here
+
+assert(distance[v] <= distance[u] + w);
+
+assert(distance[v] >= distance[u] + w);
 
 
 
