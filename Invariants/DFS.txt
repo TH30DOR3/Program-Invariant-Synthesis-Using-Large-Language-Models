@@ -42,16 +42,15 @@ assert(orderSize == vertices);               /* main – traversal order covers 
 Role://///////////////////////////////////////////////////////////////
 
 
-useful: 3
-trivial: 0
-sometimes useful: 1
+useful: 2
+trivial: 4
+sometimes useful: 2
 
-Return Useful invariants here
+/* DFS – adjacent vertex must be within graph bounds */
+assert(adjacentVertex >= 0 && adjacentVertex < graph->vertices);
 
-assert(is_sorted(arr, 0, i - 1)); // sub-array sorted before processing arr[i]
+/* DFSTraversal – every vertex listed in the traversal order is valid */
+assert(order[i] >= 0 && order[i] < graph->vertices);
 
-assert(is_sorted(arr, 0, i)); // sub-array sorted after inserting key
-
-assert(is_sorted(arr, 0, n - 1)); // whole array sorted at function exit
 
 
