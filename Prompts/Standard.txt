@@ -318,10 +318,3 @@ int main() {
 
 
 ***end of examples. Beginning of C code for task***
-
-
-	printf("Following is Depth First Traversal (starting from vertex 2):\n");
-	DFSTraversal(graph, order, orderSize);
-
-	return 0;
-}
