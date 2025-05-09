@@ -18,6 +18,29 @@ assert(order[i]  >= 0 && order[i]  < graph->vertices);    // DFSTraversal – ea
 assert(orderSize == vertices);               // main – traversal order covers all vertices
 
 
+Few shot: //////////////////////////////////////////////////////////////////////////////////////
+
+
+useful: 5
+trivial: 4
+sometimes useful: 10
+
+/* addEdge – source vertex index is within bounds */
+assert(src  >= 0 && src  < graph->vertices);
+
+/* addEdge – destination vertex index is within bounds */
+assert(dest >= 0 && dest < graph->vertices);
+
+/* DFS – the vertex being explored is within graph bounds */
+assert(vertex >= 0 && vertex < graph->vertices);
+
+/* DFS – each adjacent vertex encountered is within graph bounds */
+assert(adjacentVertex >= 0 && adjacentVertex < graph->vertices);
+
+/* DFSTraversal – every vertex listed in the traversal order is within bounds */
+assert(order[i] >= 0 && order[i] < graph->vertices);
+
+
 COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 useful: 8
