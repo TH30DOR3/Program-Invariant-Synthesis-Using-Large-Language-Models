@@ -1,2 +1,19 @@
 Standard prompt: (included after code)
-Generate program invariants 
+Generate program invariants in the format of c assertions
+
+Assertion Template prompt:
+Read this code in C, generate valid program invariants in the format of c assertions as the program executes. Insert these assertions where indicated by the comments that say "// MAKE ASSERTION HERE". The code is the following:
+
+No template prompt:
+Generate valid program invariants helpful for bug detection for the following code in C. Invariants should be added into the code in standard C assertion format.
+
+Chain of thought:
+You are given a C program. Your task is to read and understand the code and generate valid program invariants in the form of C assert(...) statements. These assertions should represent conditions that are guaranteed to be true at specific points during the execution of the program.
+Follow these guidelines:
+Identify logical invariants before and after loops, function calls, and conditionals.
+Express invariants as valid C assert(...) statements.
+Ensure that each invariant is semantically correct and holds across all executions, not just for specific inputs.
+Include variable bounds, relations (e.g., x >= 0, a[i] == i * 2), and loop invariants where appropriate.
+Do not make assumptions based on undefined behavior.
+Output the original code, and annotate it with your generated assertions in appropriate places (as if inserting them into the source).
+Here's the C code:
