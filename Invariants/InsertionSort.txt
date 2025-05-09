@@ -1,1 +1,43 @@
 
+Baseline: //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+useful: 2
+trivial: 3
+sometimes useful: 0
+
+Return Useful invariants here
+
+assert(isSorted(arr, 0, i - 1)); // at each outer-loop entry, guarantees the prefix arr[0..i-1] is already sorted (inductive hypothesis)
+
+assert(isSorted(arr, 0, i)); // after inserting key, confirms arr[0..i] is now sorted, preserving correctness
+
+
+COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+useful: 4
+trivial: 1
+sometimes useful: 2
+
+Return Useful invariants here
+
+for (int x = 0; x < i - 1; ++x) assert(arr[x] <= arr[x + 1]); // at every outer-loop entry the prefix arr[0‥i-1] is already sorted, providing the inductive hypothesis for correctness
+
+for (int x = 0; x < i; ++x) assert(arr[x] <= arr[x + 1]); // immediately after inserting key, the extended prefix arr[0‥i] is confirmed sorted, preserving the loop invariant
+
+for (int x = 0; x < n - 1; ++x) assert(arr[x] <= arr[x + 1]); // on exiting insertionSort, guarantees the entire array is in non-decreasing order (algorithm post-condition)
+
+for (int i = 0; i < n - 1; ++i) assert(arr[i] <= arr[i + 1]); // in main, an external post-condition that re-validates the algorithm’s result, useful for end-to-end verification
+
+Role:////////////////////////////////////////
+
+useful: 3
+trivial: 0
+sometimes useful: 1
+
+Return Useful invariants here
+
+assert(is_sorted(arr, 0, i - 1)); // at each outer-loop entry, confirms the prefix arr[0‥i-1] is already sorted (induction hypothesis)
+
+assert(is_sorted(arr, 0, i)); // immediately after inserting key, verifies that the extended prefix arr[0‥i] is sorted, preserving correctness
+
+assert(is_sorted(arr, 0, n - 1)); // on exiting insertionSort, guarantees the entire array is in non-decreasing order (algorithm post-condition)
