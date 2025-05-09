@@ -1,1 +1,32 @@
+Baseline: //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+useful: 0
+trivial: 4
+sometimes useful: 5
+
+
+COT: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+useful: 1
+trivial: 14
+sometimes useful: 3
+
+Return Useful invariants here
+
+assert(arr[i] <= arr[i + 1]); // post-condition in main: verifies the array is fully sorted after cycleSort finishes
+
+Role:////////////////////////////////////////
+
+useful: 4
+trivial: 0
+sometimes useful: 0
+
+Return Useful invariants here
+
+for (int i = 0; i < cycle_start - 1; i++) assert(arr[i] <= arr[i + 1]); // before each cycle begins, the prefix arr[0..cycle_start-1] is already sorted
+
+assert(pos == cycle_start + count); // guarantees pos equals the exact number of elements smaller than item, so the algorithm will place item in its rank-correct slot
+
+for (int i = 0; i < cycle_start; i++) assert(arr[i] <= arr[i + 1]); // after finishing one cycle, the extended prefix arr[0..cycle_start] is sorted
+
+for (int i = 0; i < n - 1; i++) assert(arr[i] <= arr[i + 1]); // post-condition: the whole array is in non-decreasing order when cycleSort returns
