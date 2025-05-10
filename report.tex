@@ -54,21 +54,43 @@ Program invariants are essential to software development and verification, helpi
 
 There has been an increase in work towards building tools that exploit LLMs to generate invariants for program verification. Initial observations show that GPT models have the capability to synthesize invariants in a zero-shot setting, but require several samples and many calls to a verifier to be produced. To tackle this issue, a re-ranking tool was developed that can distinguish between inductive invariants and incorrect ones (Chakraborty et al., 2023). In a similar vein, LEMUR is a framework that uses LLMs to generate invariants and leverages formal reasoners to verify programs soundly (Wu et al., 2024). Further work was done to improve loop invariant synthesis in programs with more complex data structures and memory manipulations. The LLM-SE framework coordinates LLM with symbolic execution and uses fine-tuned models to generate invariants on these harder benchmarks (Liu et al., 2023). Another type of invariant that has been investigated is class invariants. ClassInvGen is a method that generates executable class invariants of high quality by leveraging LLMs’ ability to synthesize pure functions, outperforming other pure LLM methods or data-driven inference techniques (Sun et al., 2025).
 
-\section{Prepare Your Paper Before Styling}
-Before you begin to format your paper, first write and save the content as a 
-separate text file. Complete all content and organizational editing before 
-formatting. Please note sections \ref{AA}--\ref{SCM} below for more information on 
-proofreading, spelling and grammar.
+\section{Methodology}
+Generating and verifying program invariants using LLMs followed a distinct process. First, program benchmarks were collected by sourcing C programs from previously existing algorithms. The algorithms were collected to handle a variety of different data structures, such as traversing trees or graph structures. [talk about algorithm choices]
+	With these algorithms, we used GPT-4o to prompt the LLM to generate invariants for the given program in the form of standard C assert statements. For each algorithm, the program is given to the LLM along with a specific prompt. The prompts used can be found on Appendix A. In this project, we considered:
+Traditional prompting
+Chain-of-thought prompting
+Few-shot prompting
+Role prompting
+Thus, each algorithm is prompted to the LLM four times, once for each prompting method. The LLM returns code for a new program that should be nearly identical to the input code, just with various assert() statements throughout the program. It’s important to note that we don’t specify the type or quantity of invariants, but rather let the LLM determine what’s important to verify.
+CBMC is a Bounded Model Checker for C/C++ programs. For this project, CBMC serves as a symbolic verifier for the benchmarks and programs that we are testing. In a way, we are trying to formally verify the programs that we are testing on. 
+CBMC played a crucial role in verifying the invariants produced by the LLM. CBMC is first used to verify that the program is valid before any assertions are made. In other words, the verifier checks that the program executes without serious errors. After the LLM outputs a new program with invariant assertion statements, the CBMC is used to verify that program as well. If the program is verified, then the invariants produced by the LLM are true. If the program fails, the incorrect invariants are identified and recorded.
 
-Keep your text and graphic files separate until after the text has been 
-formatted and styled. Do not number text heads---{\LaTeX} will do that 
-for you.
 
-\subsection{Abbreviations and Acronyms}\label{AA}
-Define abbreviations and acronyms the first time they are used in the text, 
-even after they have been defined in the abstract. Abbreviations such as 
-IEEE, SI, MKS, CGS, ac, dc, and rms do not have to be defined. Do not use 
-abbreviations in the title or heads unless they are unavoidable.
+\subsection{Evaluation Methodology}\label{AA}
+Evaluating the capability of LLM’s, specifically GPT-o4, on generating program invariants is not a clear cut process. State of the art models are very skillful in both writing and analyzing code and its properties, meaning they tend to synthesize valid assertions most of the time. Thus, quantitative evaluation methods are not as representative of the usefulness of invariants generated, since our experimentation found the model often generated many trivial or unhelpful assertions, which were still valid invariants for all possible inputs. For this reason, we perform qualitative analysis on the usefulness of these invariants in the context of helping programmers fix runtime errors by exposing their root causes. The criteria we came up with in order to categorize each invariant based on its usefulness is as follows:
+1. Useful Invariants
+Definition: An invariant is useful if violating it would signal a semantic or logical error in the program's behavior, i.e., the program would be partially or wholly incorrect with respect to its specification.
+Rules for Classification:
+It constrains functional correctness, such as optimality, consistency, or convergence.
+It enforces key algorithmic properties (e.g., triangle inequality, sortedness, balance conditions).
+It is not implied by syntax, variable declarations, or constant assignments.
+Violating it would affect output, control flow, or data structure integrity.
+It often relates to postconditions or loop-fixed points.
+2. Trivial Invariants
+Definition: An invariant is trivial if it checks a property that is guaranteed by immediate syntax, language semantics, or initialization logic. These invariants offer no additional verification power and are redundant unless detecting memory corruption.
+Rules for Classification:
+It checks a value immediately after declaration or assignment to a constant.
+It asserts a condition that is structurally guaranteed (e.g., loop bounds, index ranges).
+It confirms properties already enforced by static typing or domain constraints.
+It would always hold unless the code is malformed or violates basic invariants (e.g., segmentation faults).
+3. Sometimes Useful Invariants
+Definition: An invariant is sometimes useful if it does not directly enforce correctness, but can serve as a diagnostic or sanity check, help during debugging or partial implementation, or act as a guard against uncommon side effects or unexpected inputs.
+Rules for Classification:
+It asserts a redundant or derived property, but not guaranteed by syntax.
+It may help uncover implementation mistakes (e.g., forgotten guards or missed updates).
+It’s not strictly necessary for correctness, but aids program stability or maintainability.
+Its utility depends on context (e.g., development vs. production).
+
 
 \subsection{Units}
 \begin{itemize}
