@@ -1,10 +1,4 @@
-Standard prompt: (included after code)
-Generate program invariants in the format of c assertions
-
-Assertion Template prompt:
-Read this code in C, generate valid program invariants in the format of c assertions as the program executes. Insert these assertions where indicated by the comments that say "// MAKE ASSERTION HERE". The code is the following:
-
-No template prompt:
+Baseline prompt:
 Generate valid program invariants helpful for bug detection for the following code in C. Invariants should be added into the code in standard C assertion format.
 
 Chain of thought:
