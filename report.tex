@@ -44,13 +44,10 @@ twoodward25@amherst.edu}
 Program invariants play a crucial role in formal verification, optimization, and automated reasoning. Yet, it remains challenging and computationally intensive to synthesize a program’s invariants. The recent advances in large language models (LLMs) have shown their capabilities to be useful for a variety of programming tasks, such as generating code for a specified task. In this work, we build on previous works regarding LLMs and program invariants, offering our own analysis and evaluation. We investigate the capabilities and limitations of LLMs, using GPT-4o in generating program invariants for various benchmark programs. Additionally, we analyze the impact of various prompt engineering techniques on the accuracy of the invariants. We analyze the correctness, generality, and usefulness of these verification statements. Our findings reveal that while GPT-4o can generate a high volume of correct invariants, their usefulness varies significantly, with many being trivial. Prompt engineering techniques, particularly Few-Shot prompting, can enhance the generation of useful invariants, though no single technique consistently outperforms others across all benchmarks, and challenges remain for complex algorithmic properties.
 \end{abstract}
 
-\begin{IEEEkeywords}
-component, formatting, style, styling, insert
-\end{IEEEkeywords}
+
 
 \section{Introduction}
-This document is a model and instructions for \LaTeX.
-Please observe the conference page limits. 
+Program invariants are essential to software development and verification, helping to ensure the correctness and safety of code through the entirety of execution. Synthesizing these invariants requires significant computational power and time, especially for large-scale programs. However, the rise of large language models allows us to potentially automate parts of this process. LLMs have demonstrated proficiency in solving various programming tasks such as code generation, bug fixing, and potentially program invariant synthesis. This project aims to evaluate the effectiveness of LLMs in generating these invariants for a variety of C program benchmarks. We investigate how different prompting techniques can affect the quality and correctness of the invariants. We use a formal verifier, CBMC, to assess the validity of invariants produced. 
 
 \section{Ease of Use}
 
