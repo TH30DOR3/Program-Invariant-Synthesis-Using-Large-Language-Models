@@ -49,17 +49,10 @@ Program invariants play a crucial role in formal verification, optimization, and
 \section{Introduction}
 Program invariants are essential to software development and verification, helping to ensure the correctness and safety of code through the entirety of execution. Synthesizing these invariants requires significant computational power and time, especially for large-scale programs. However, the rise of large language models allows us to potentially automate parts of this process. LLMs have demonstrated proficiency in solving various programming tasks such as code generation, bug fixing, and potentially program invariant synthesis. This project aims to evaluate the effectiveness of LLMs in generating these invariants for a variety of C program benchmarks. We investigate how different prompting techniques can affect the quality and correctness of the invariants. We use a formal verifier, CBMC, to assess the validity of invariants produced. 
 
-\section{Ease of Use}
+\section{Related Work}
 
-\subsection{Maintaining the Integrity of the Specifications}
 
-The IEEEtran class file is used to format your paper and style the text. All margins, 
-column widths, line spaces, and text fonts are prescribed; please do not 
-alter them. You may note peculiarities. For example, the head margin
-measures proportionately more than is customary. This measurement 
-and others are deliberate, using specifications that anticipate your paper 
-as one part of the entire proceedings, and not as an independent document. 
-Please do not revise any of the current designations.
+There has been an increase in work towards building tools that exploit LLMs to generate invariants for program verification. Initial observations show that GPT models have the capability to synthesize invariants in a zero-shot setting, but require several samples and many calls to a verifier to be produced. To tackle this issue, a re-ranking tool was developed that can distinguish between inductive invariants and incorrect ones (Chakraborty et al., 2023). In a similar vein, LEMUR is a framework that uses LLMs to generate invariants and leverages formal reasoners to verify programs soundly (Wu et al., 2024). Further work was done to improve loop invariant synthesis in programs with more complex data structures and memory manipulations. The LLM-SE framework coordinates LLM with symbolic execution and uses fine-tuned models to generate invariants on these harder benchmarks (Liu et al., 2023). Another type of invariant that has been investigated is class invariants. ClassInvGen is a method that generates executable class invariants of high quality by leveraging LLMs’ ability to synthesize pure functions, outperforming other pure LLM methods or data-driven inference techniques (Sun et al., 2025).
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
